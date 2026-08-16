@@ -1,0 +1,21 @@
+# Dependencies and generated output
+node_modules/
+dist/
+tmp/
+coverage/
+*.log
+npm-debug.log*
+.DS_Store
+
+# Local credentials
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Design-source folders are not loaded by the production app.
+/Des Ref/
+/Spot the Mistake Resources/
+
+# The app resolves each image through its smaller WebP counterpart.
+/public/**/*.png

@@ -1,0 +1,28 @@
+{
+  "name": "spot-the-mistake-rmit",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "debug:references": "node scripts/reference-sheets.mjs",
+    "test:visual": "node scripts/visual-check.mjs",
+    "test:full-flow": "node scripts/full-flow-check.mjs",
+    "test:modes": "node scripts/mode-overview-check.mjs",
+    "test:responsive": "node scripts/responsive-check.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.112.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.5",
+    "puppeteer-core": "25.7.0",
+    "sharp": "0.35.3",
+    "vite": "8.2.1"
+  }
+}
