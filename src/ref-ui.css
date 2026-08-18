@@ -63,8 +63,8 @@
 .info-screen { min-height: 1010px; padding-bottom: 110px; }
 .info-screen .ref-logo { margin-top: 4px; }
 .info-hero { height: 214px; margin-top: 8px; position: relative; }
-.info-character { width: 57%; position: absolute; left: 2%; bottom: -8px; }
-.info-bubble { width: 55%; position: absolute; right: 3%; top: 72px; }
+.info-character { width: 57%; position: absolute; left: 2%; bottom: -8px; z-index: 2; }
+.info-bubble { width: 55%; position: absolute; right: 3%; top: 72px; z-index: 1; }
 .info-form { width: calc(100% - 54px); margin: 0 auto; position: relative; z-index: 3; display: grid; gap: 27px; }
 .ref-field { display: grid; gap: 10px; }
 .ref-field > img { width: 100%; display: block; }
@@ -435,7 +435,11 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .sid-tip { margin: 24px 0 0 28px; }
 .verify-character { width: calc(min(80%, 420px) * var(--verify-char-scale)); right: -7%; bottom: 22px; }
 .verify-stars { bottom: 50px; }
-.verify-next { left: auto; right: 24px; bottom: 42px; }
+/* The mascot and rating badge already own the bottom-right corner — an absolutely positioned Enter
+   button there was fighting them for the same space (and could only lose: shrinking the mascot
+   enough to clear a fixed on-screen button meant shrinking it to almost nothing). Flow it in
+   normal document order right under the tip instead, in the space that's already clear there. */
+.verify-next { position: static; margin: 22px 0 0 28px; }
 
 .info-screen { height: 100dvh; min-height: 0; padding: 0; }
 .info-screen .ref-logo { width: min(84%, 440px); margin-top: 2px; }

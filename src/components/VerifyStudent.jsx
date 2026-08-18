@@ -29,6 +29,7 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
   const formRef = useRef(null)
   const tipRef = useRef(null)
   const characterRef = useRef(null)
+  const nextRef = useRef(null)
 
   useLayoutEffect(() => {
     const screenEl = screenRef.current
@@ -41,12 +42,15 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
       screenEl.style.height = ''
       formEl.style.setProperty('--verify-char-scale', '1')
       const formTop = formEl.getBoundingClientRect().top
-      const tipBottom = tipEl.getBoundingClientRect().bottom - formTop
+      // The Enter button flows right after the tip once the SID is valid, so it — not the tip — is
+      // the bottom edge of that content block whenever it's present.
+      const nextEl = nextRef.current
+      const flowBottom = (nextEl || tipEl).getBoundingClientRect().bottom - formTop
       const charRect = characterEl.getBoundingClientRect()
       if (charRect.height < 4) return // <img> hasn't decoded yet — its box reads as ~0 tall
 
       const charTop = charRect.top - formTop
-      const overlap = tipBottom + GAP - charTop
+      const overlap = flowBottom + GAP - charTop
       if (overlap <= 0) return // already clear at full size
 
       const shrinkable = charRect.height * (1 - MIN_CHARACTER_SCALE)
@@ -73,7 +77,7 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
       window.removeEventListener('orientationchange', layout)
       images.forEach((image) => image.removeEventListener('load', layout))
     }
-  }, [])
+  }, [valid])
 
-  return <section ref={screenRef} className="ref-screen ref-red verify-screen"><BrandMark onClick={onBack} label="Back to start" /><form ref={formRef} className="verify-form" onSubmit={submit}><div className="verify-card"><img src={asset('Logo.png')} alt="Spot the Mistake" /><p>This is exclusively for</p><h1>RMIT Students</h1><label className="sr-only" htmlFor="student-id">Student ID</label><input id="student-id" value={sid} onChange={(event) => updateSid(event.target.value)} placeholder={sid ? '' : 'Enter your Student ID'} inputMode="numeric" autoComplete="off" required pattern="[sS][0-9]{7}" aria-describedby="sid-tip" aria-invalid={Boolean(sid) && !valid} /></div><p ref={tipRef} id="sid-tip" className="sid-tip" aria-live="polite">{valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify!'}</p><RatingStars /><img ref={characterRef} className="verify-character" src={asset('Collecting information/Frame 483.png')} alt="Illustrated career coach" />{valid && <button className="ref-next verify-next" type="submit">Enter <span>›</span></button>}</form></section>
+  return <section ref={screenRef} className="ref-screen ref-red verify-screen"><BrandMark onClick={onBack} label="Back to start" /><form ref={formRef} className="verify-form" onSubmit={submit}><div className="verify-card"><img src={asset('Logo.png')} alt="Spot the Mistake" /><p>This is exclusively for</p><h1>RMIT Students</h1><label className="sr-only" htmlFor="student-id">Student ID</label><input id="student-id" value={sid} onChange={(event) => updateSid(event.target.value)} placeholder={sid ? '' : 'Enter your Student ID'} inputMode="numeric" autoComplete="off" required pattern="[sS][0-9]{7}" aria-describedby="sid-tip" aria-invalid={Boolean(sid) && !valid} /></div><p ref={tipRef} id="sid-tip" className="sid-tip" aria-live="polite">{valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify!'}</p><RatingStars /><img ref={characterRef} className="verify-character" src={asset('Collecting information/Frame 483.png')} alt="Illustrated career coach" />{valid && <button ref={nextRef} className="ref-next verify-next" type="submit">Enter <span>›</span></button>}</form></section>
 }
