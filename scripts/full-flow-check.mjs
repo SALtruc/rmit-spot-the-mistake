@@ -26,18 +26,6 @@ async function reachSetup() {
 }
 
 await reachSetup()
-await page.click('.play-mode-options .setup-card:nth-child(2)')
-await page.click('.document-options .setup-card:nth-child(3)')
-await page.click('.setup-next')
-await settle()
-if (await page.$('.pair-setup-note')) {
-  await shot('pair-01-supabase-required')
-} else {
-  await shot('pair-01-choice')
-}
-
-await reachSetup()
-await page.click('.play-mode-options .setup-card:nth-child(1)')
 await page.click('.document-options .setup-card:nth-child(3)')
 await page.click('.setup-next')
 await page.$eval('.intro-review', (button) => button.click())
@@ -68,4 +56,4 @@ await page.$eval('.corrected-viewer > img', (image) => image.decode())
 await shot('result-corrected-viewer')
 
 await browser.close()
-console.log('Solo game flow and Pair Supabase setup state passed.')
+console.log('Solo game flow passed.')

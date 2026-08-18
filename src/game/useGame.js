@@ -18,21 +18,26 @@ export function useGame() {
   const [status, setStatus] = useState({})
   const [tapped, setTapped] = useState({})
   const [feedback, setFeedback] = useState(null)
-  const [profile, setProfile] = useState({ sid: '', avatar: null, year: '', program: '', accessCode: '', playMode: null, documentMode: null })
+  const [revealed, setRevealed] = useState({})
+  const [profile, setProfile] = useState({ sid: '', avatar: null, year: '', program: '', accessCode: '', documentMode: null })
 
   const doc = mode ? documents[mode] : null
   const section = active === null || !doc ? null : doc.sections[active]
   const activeKey = active === null ? '' : `${mode}-${active}`
   const tappedLines = tapped[activeKey] || []
-  const mistakeCount = section ? section.lines.filter(([, isMistake]) => isMistake).length : 0
+  const mistakeCount = section ? section.lines.filter(([, isMistake]) => isMistake === true).length : 0
   const foundMistakes = section ? tappedLines.filter((index) => section.lines[index][1]).length : 0
   const isSectionDone = section ? status[active] === 'done' : false
+  const isSectionRevealed = section ? Boolean(revealed[active]) : false
   const completed = doc ? Object.values(status).filter((state) => state === 'done').length : 0
   const badge = useMemo(() => doc ? getBadge(doc, score) : '', [doc, score])
 
   const setProfileField = (field, value) => setProfile((previous) => ({ ...previous, [field]: value }))
-  const resetGame = () => { setScreen('home'); setMode(null); setActive(null); setScore(0); setCombo(1); setStatus({}); setTapped({}); setFeedback(null); setProfile({ sid: '', avatar: null, year: '', program: '', accessCode: '', playMode: null, documentMode: null }) }
-  const chooseMode = (nextMode) => { setMode(nextMode); setScreen('intro'); setActive(null); setScore(0); setCombo(1); setStatus({}); setTapped({}); setFeedback(null) }
+  const resetGame = () => { setScreen('home'); setMode(null); setActive(null); setScore(0); setCombo(1); setStatus({}); setTapped({}); setFeedback(null); setRevealed({}); setProfile({ sid: '', avatar: null, year: '', program: '', accessCode: '', documentMode: null }) }
+  // Return to the mode/type picker without losing what the student already entered (SID, avatar,
+  // year, program), so replaying with a different document doesn't mean filling the form again.
+  const backToChoose = () => { setScreen('choose'); setMode(null); setActive(null); setScore(0); setCombo(1); setStatus({}); setTapped({}); setFeedback(null); setRevealed({}) }
+  const chooseMode = (nextMode) => { setMode(nextMode); setScreen('intro'); setActive(null); setScore(0); setCombo(1); setStatus({}); setTapped({}); setFeedback(null); setRevealed({}) }
   const openSection = (index) => { setActive(index); setStatus((previous) => previous[index] === 'done' ? previous : { ...previous, [index]: 'active' }); setFeedback(null); setScreen('play') }
   const leaveSection = () => { setFeedback(null); setScreen('overview') }
   const clearFeedback = () => setFeedback(null)
@@ -42,7 +47,7 @@ export function useGame() {
     if (doc?.id !== 'linkedin' || isSectionDone) return
 
     const selected = [...new Set(selections)].filter((index) => Number.isInteger(index) && index >= 0 && index < section.lines.length)
-    const mistakes = section.lines.flatMap(([, isMistake], index) => isMistake ? [index] : [])
+    const mistakes = section.lines.flatMap(([, isMistake], index) => isMistake === true ? [index] : [])
     const confirmed = tappedLines.filter((index) => mistakes.includes(index))
     const newlyConfirmed = selected.filter((index) => mistakes.includes(index) && !confirmed.includes(index))
     const incorrectSelections = selected.filter((index) => !mistakes.includes(index))
@@ -93,6 +98,16 @@ export function useGame() {
     if (mistakeCount === 0) return awardCorrect('Sharp eye! This section is clean. The details are complete and professionally formatted.', true)
     awardWrong('There is at least one mistake in this section. Keep looking carefully!')
   }
+  // Reveals every mistake line without scoring it, for students who just want to see the answer.
+  // The section is still marked done so they can move on, but no points are awarded for it.
+  const revealSection = () => {
+    if (!section || isSectionDone) return
+    const mistakeIndexes = section.lines.flatMap(([, isMistake], index) => isMistake === true ? [index] : [])
+    setTapped((previous) => ({ ...previous, [activeKey]: mistakeIndexes }))
+    setRevealed((previous) => ({ ...previous, [active]: true }))
+    setStatus((previous) => ({ ...previous, [active]: 'done' }))
+    setFeedback(null)
+  }
 
-  return { screen, setScreen, doc, section, active, score, combo, status, tappedLines, feedback, isSectionDone, completed, badge, profile, setProfileField, totalMistakes: doc ? getMistakeCount(doc) : 0, resetGame, chooseMode, openSection, leaveSection, clearFeedback, tapLine, chooseNone, submitSelections }
+  return { screen, setScreen, doc, section, active, score, combo, status, tappedLines, feedback, isSectionDone, isSectionRevealed, completed, badge, profile, setProfileField, totalMistakes: doc ? getMistakeCount(doc) : 0, resetGame, backToChoose, chooseMode, openSection, leaveSection, clearFeedback, tapLine, chooseNone, submitSelections, revealSection }
 }

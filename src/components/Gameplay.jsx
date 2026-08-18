@@ -3,7 +3,7 @@ import { asset } from '../utils/assets'
 import { RefHeader } from './RefChrome'
 import { ScoreBar } from './shared'
 
-export function Gameplay({ doc, avatar, section, index, status, tapped, done, feedback, score, combo, onLine, onNone, onSubmitSelections, onRetry, onDone }) {
+export function Gameplay({ doc, avatar, section, index, status, tapped, done, revealed, feedback, score, combo, onLine, onNone, onSubmitSelections, onRetry, onDone, onReveal }) {
   const [showHint, setShowHint] = useState(false)
   const [pending, setPending] = useState(null)
   const [selectedLines, setSelectedLines] = useState([])
@@ -63,7 +63,7 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, fe
 
   const canSubmit = isMultiSelect ? selectionTouched : pending !== null
   const confirmedMistakes = tapped.filter((lineIndex) => section.lines[lineIndex]?.[1]).length
-  const remainingMistakes = section.lines.filter(([, isMistake]) => isMistake).length - confirmedMistakes
+  const remainingMistakes = section.lines.filter(([, isMistake]) => isMistake === true).length - confirmedMistakes
   const instruction = isMultiSelect
     ? `Select every line that contains a mistake. Correct answers stay checked after you submit.${confirmedMistakes ? ` ${remainingMistakes} mistake${remainingMistakes === 1 ? '' : 's'} left to find.` : ' You can choose more than one answer before submitting.'}`
     : 'Tap the line containing a mistake. If nothing is wrong, tap None — this section looks fine.'
@@ -78,10 +78,12 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, fe
       <p id="section-instruction" className="section-instruction">{instruction}</p>
       <div className="line-list">
         {section.lines.map(([text, mistake], lineIndex) => {
+          if (mistake === 'header') return <p key={`${lineIndex}-${text}`} className="answer-line-header">{text}</p>
+
           const submitted = tapped.includes(lineIndex)
           const selected = isMultiSelect ? selectedLines.includes(lineIndex) : pending === lineIndex
           const state = submitted
-            ? mistake ? 'correct' : 'wrong'
+            ? revealed ? 'revealed' : mistake ? 'correct' : 'wrong'
             : selected ? 'pending' : ''
 
           return <button
@@ -93,7 +95,6 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, fe
             aria-describedby="section-instruction"
             className={`answer-line ${state}`}
           >
-            {doc.id === 'interview' && <span>{String(lineIndex + 1).padStart(2, '0')}</span>}
             <b>{text}</b>
           </button>
         })}
@@ -108,10 +109,12 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, fe
       </button>
       {isMultiSelect && <p className="selection-count" aria-live="polite">{selectionTouched ? `${selectedLines.length} answer${selectedLines.length === 1 ? '' : 's'} selected` : 'Choose every answer that applies.'}</p>}
       {!feedback && !done && <button className="section-submit" type="button" disabled={!canSubmit} onClick={submit}>{isMultiSelect ? 'Submit selected answers' : 'Submit'} <span>›</span></button>}
+      {!feedback && !done && <button className="show-answer" type="button" onClick={onReveal}>Show answer <small>(no points for this section)</small></button>}
       {feedback && <div className={`feedback ${feedback.kind}`} role="status"><strong>{feedback.title}</strong><p>{feedback.text}</p></div>}
       {feedback && !done && <div className="feedback-actions">
         <button type="button" onClick={retry}>{isMultiSelect ? `Keep looking${remainingMistakes ? ` (${remainingMistakes} left)` : ''}` : 'Try another answer'}</button>
       </div>}
+      {revealed && done && <p className="revealed-note">Answer revealed — no points earned for this section.</p>}
       {done && <button className="done-button" type="button" onClick={onDone}><img src={asset('Done button.png')} alt="Done — return to document overview" /></button>}
     </article>
     <ScoreBar doc={doc} status={status} score={score} combo={combo} />

@@ -15,7 +15,6 @@ async function reachSetup() {
   await page.type('.ref-field:nth-child(1) input', 'Year 3')
   await page.type('.ref-field:nth-child(2) input', 'Digital Marketing')
   await page.click('.info-next')
-  await page.click('.play-mode-options .setup-card:nth-child(1)')
 }
 
 for (const [modeIndex, name] of ['cv', 'linkedin'].entries()) {

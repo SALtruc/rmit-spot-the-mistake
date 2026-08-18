@@ -1,7 +1,10 @@
 :root { color: #070766; background: #fffaf0; font-family: Arial, Helvetica, sans-serif; font-synthesis: none; }
 * { box-sizing: border-box; }
 body { min-width: 320px; margin: 0; background: #fffaf0; overflow-x: hidden; }
-button { font: inherit; cursor: pointer; }
+/* iOS Safari can render an unstyled <button>'s text in the system tint blue instead of the
+   inherited text color unless both are set explicitly — force it to behave like any other
+   inline element everywhere in the app. */
+button { font: inherit; color: inherit; cursor: pointer; -webkit-appearance: none; appearance: none; }
 button:focus-visible { outline: 4px solid #1dcddd; outline-offset: 3px; }
 button:disabled { cursor: not-allowed; }
 .app-shell { min-height: 100dvh; overflow: hidden; background: repeating-linear-gradient(0deg, rgba(7,7,102,.035) 0 1px, transparent 1px 6px), #fffaf0; }

@@ -57,10 +57,12 @@ export const documents = {
         ['Please hire me! 🥺 Check out my experience below.', true, 'This sounds desperate and unprofessional. End with a confident, professional call to action.'],
       ] },
       { title: 'Experience', lines: [
+        ['Marketing Intern', 'header'],
         ['Freelancer · Jan 2025 – Present', false, 'Role title and dates are present.'],
         ['Manage a page on Facebook for a small shop. Increased followers by a lot.', true, '“By a lot” is not evidence. Give a measurable outcome, such as a percentage and timeframe.'],
         ['Design posters using Canva.', false, 'Canva is a relevant tool for a marketing role.'],
         ['Do whatever my boss asked me to do.', true, 'This conveys passivity. Start bullets with a strong action verb and describe your contribution.'],
+        ['Team Member', 'header'],
         ['RMIT Student Club · Oct 2024 – Dec 2024', false, 'Role and dates are clear.'],
         ['Joined the club and talked to people. Help to organize one event in HCMC campus.', false, 'This could be stronger, but it is not the primary mistake flagged here.'],
         ['Left because I was too busy with assignments.', true, 'Do not explain why you left a role on LinkedIn. List what you contributed instead.'],
@@ -119,4 +121,4 @@ export const documents = {
   },
 }
 
-export const getMistakeCount = (doc) => doc.sections.flatMap((section) => section.lines).filter(([, mistake]) => mistake).length
+export const getMistakeCount = (doc) => doc.sections.flatMap((section) => section.lines).filter(([, mistake]) => mistake === true).length

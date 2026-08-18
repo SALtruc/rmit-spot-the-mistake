@@ -26,7 +26,6 @@ for (const width of widths) {
   await page.type('.ref-field:nth-child(2) input', 'Digital Marketing')
   await page.click('.info-next')
   await assertNoOverflow('setup')
-  await page.click('.play-mode-options .setup-card:nth-child(1)')
   await page.click('.document-options .setup-card:nth-child(3)')
   await page.click('.setup-next')
   await assertNoOverflow('intro')
