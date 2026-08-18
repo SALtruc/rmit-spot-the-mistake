@@ -1,6 +1,9 @@
-:root { color: #070766; background: #fffaf0; font-family: Arial, Helvetica, sans-serif; font-synthesis: none; }
+:root { color: #070766; background: #fffaf0; font-family: Arial, Helvetica, sans-serif; font-synthesis: none; overscroll-behavior-y: none; }
 * { box-sizing: border-box; }
-body { min-width: 320px; margin: 0; background: #fffaf0; overflow-x: hidden; }
+/* Without this, iOS Safari's rubber-band bounce at the top/bottom of the page briefly reveals the
+   app-shell's own background (a different color from whichever screen is showing) as a gap under
+   the character/content — most visible on screens sized to exactly one viewport. */
+body { min-width: 320px; margin: 0; background: #fffaf0; overflow-x: hidden; overscroll-behavior-y: none; }
 /* iOS Safari can render an unstyled <button>'s text in the system tint blue instead of the
    inherited text color unless both are set explicitly — force it to behave like any other
    inline element everywhere in the app. */
