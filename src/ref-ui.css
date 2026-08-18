@@ -428,12 +428,12 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .ref-brand-mark svg { fill: var(--ref-red); filter: drop-shadow(3px 3px 0 #050505); }
 
 .verify-screen { height: 100dvh; min-height: 0; }
-.verify-form { height: 100%; min-height: 0; padding-top: clamp(220px, 25dvh, 255px); }
+.verify-form { height: 100%; min-height: 0; padding-top: clamp(220px, 25dvh, 255px); --verify-char-scale: 1; }
 .verify-card { min-height: 348px; padding: 112px 26px 24px; }
 .verify-card img { width: 98%; left: 1%; top: -100px; }
 .verify-card h1 { margin-bottom: 33px; }
 .sid-tip { margin: 24px 0 0 28px; }
-.verify-character { width: min(80%, 420px); right: -7%; bottom: 22px; }
+.verify-character { width: calc(min(80%, 420px) * var(--verify-char-scale)); right: -7%; bottom: 22px; }
 .verify-stars { bottom: 50px; }
 .verify-next { left: auto; right: 24px; bottom: 42px; }
 
@@ -467,7 +467,6 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
   .verify-form { padding-top: 205px; }
   .verify-card { min-height: 322px; padding-top: 98px; }
   .verify-card h1 { margin-bottom: 24px; }
-  .verify-character { width: 70%; bottom: 8px; }
   .sid-tip { margin-top: 16px; }
   .info-screen .ref-logo { width: 75%; }
   .info-hero { height: 108px; }

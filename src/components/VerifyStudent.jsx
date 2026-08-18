@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react'
 import { asset } from '../utils/assets'
 import { BrandMark } from './RefChrome'
 
@@ -7,6 +8,15 @@ function RatingStars() {
   return <svg className="verify-stars" viewBox="0 0 120 24" role="img" aria-label="Five stars"><defs><path id="rating-star" d={starPath} /></defs>{[0, 24, 48, 72, 96].map((x) => <use key={x} href="#rating-star" x={x} fill="#ffcf00" stroke="#050505" strokeWidth="1.4" />)}</svg>
 }
 
+// The mascot is bottom-anchored to the whole screen (fixed height:100dvh) while the SID-verified
+// tip sits in normal document flow — on a short viewport the mascot's top edge creeps up while the
+// tip's position barely moves, so they can overlap and the mascot (later in the DOM) covers the
+// text. Shrink the mascot from its own measured geometry first; if even the smallest readable size
+// still doesn't fit (a very short viewport, e.g. landscape), grow the screen and let it scroll
+// instead of clipping or overlapping.
+const MIN_CHARACTER_SCALE = 0.5
+const GAP = 18
+
 export function VerifyStudent({ sid, onChange, onBack, onNext }) {
   const valid = /^s\d{7}$/i.test(sid.trim())
   const submit = (event) => { event.preventDefault(); if (valid) onNext() }
@@ -15,5 +25,55 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
     onChange(digits ? `s${digits}` : '')
   }
 
-  return <section className="ref-screen ref-red verify-screen"><BrandMark onClick={onBack} label="Back to start" /><form className="verify-form" onSubmit={submit}><div className="verify-card"><img src={asset('Logo.png')} alt="Spot the Mistake" /><p>This is exclusively for</p><h1>RMIT Students</h1><label className="sr-only" htmlFor="student-id">Student ID</label><input id="student-id" value={sid} onChange={(event) => updateSid(event.target.value)} placeholder={sid ? '' : 'Enter your Student ID'} inputMode="numeric" autoComplete="off" required pattern="[sS][0-9]{7}" aria-describedby="sid-tip" aria-invalid={Boolean(sid) && !valid} /></div><p id="sid-tip" className="sid-tip" aria-live="polite">{valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify!'}</p><RatingStars /><img className="verify-character" src={asset('Collecting information/Frame 483.png')} alt="Illustrated career coach" />{valid && <button className="ref-next verify-next" type="submit">Enter <span>›</span></button>}</form></section>
+  const screenRef = useRef(null)
+  const formRef = useRef(null)
+  const tipRef = useRef(null)
+  const characterRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const screenEl = screenRef.current
+    const formEl = formRef.current
+    const tipEl = tipRef.current
+    const characterEl = characterRef.current
+    if (!screenEl || !formEl || !tipEl || !characterEl) return
+
+    const layout = () => {
+      screenEl.style.height = ''
+      formEl.style.setProperty('--verify-char-scale', '1')
+      const formTop = formEl.getBoundingClientRect().top
+      const tipBottom = tipEl.getBoundingClientRect().bottom - formTop
+      const charRect = characterEl.getBoundingClientRect()
+      if (charRect.height < 4) return // <img> hasn't decoded yet — its box reads as ~0 tall
+
+      const charTop = charRect.top - formTop
+      const overlap = tipBottom + GAP - charTop
+      if (overlap <= 0) return // already clear at full size
+
+      const shrinkable = charRect.height * (1 - MIN_CHARACTER_SCALE)
+      if (overlap <= shrinkable) {
+        const scale = (charRect.height - overlap) / charRect.height
+        formEl.style.setProperty('--verify-char-scale', String(scale))
+        return
+      }
+
+      // Shrinking to the floor still isn't enough room — apply the floor and grow the screen for
+      // the rest, the same way Intro.jsx does. bottom-anchored siblings shift down automatically.
+      formEl.style.setProperty('--verify-char-scale', String(MIN_CHARACTER_SCALE))
+      screenEl.style.height = `calc(100dvh + ${Math.ceil(overlap - shrinkable)}px)`
+    }
+
+    layout()
+    const images = formEl.querySelectorAll('img')
+    images.forEach((image) => { if (!image.complete) image.addEventListener('load', layout) })
+    const observer = new ResizeObserver(layout)
+    observer.observe(screenEl)
+    window.addEventListener('orientationchange', layout)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('orientationchange', layout)
+      images.forEach((image) => image.removeEventListener('load', layout))
+    }
+  }, [])
+
+  return <section ref={screenRef} className="ref-screen ref-red verify-screen"><BrandMark onClick={onBack} label="Back to start" /><form ref={formRef} className="verify-form" onSubmit={submit}><div className="verify-card"><img src={asset('Logo.png')} alt="Spot the Mistake" /><p>This is exclusively for</p><h1>RMIT Students</h1><label className="sr-only" htmlFor="student-id">Student ID</label><input id="student-id" value={sid} onChange={(event) => updateSid(event.target.value)} placeholder={sid ? '' : 'Enter your Student ID'} inputMode="numeric" autoComplete="off" required pattern="[sS][0-9]{7}" aria-describedby="sid-tip" aria-invalid={Boolean(sid) && !valid} /></div><p ref={tipRef} id="sid-tip" className="sid-tip" aria-live="polite">{valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify!'}</p><RatingStars /><img ref={characterRef} className="verify-character" src={asset('Collecting information/Frame 483.png')} alt="Illustrated career coach" />{valid && <button className="ref-next verify-next" type="submit">Enter <span>›</span></button>}</form></section>
 }
