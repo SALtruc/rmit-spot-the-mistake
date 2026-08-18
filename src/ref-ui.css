@@ -480,12 +480,17 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 }
 
 /* Accurate document tap targets, readable challenge status, and full-size corrected files. */
-.interactive-document.cv .document-hotspots button { border-width: 2px; border-radius: 7px; }
-.interactive-document.cv .document-hotspots button:nth-child(1) { left: 3%; top: 22%; width: 33.5%; height: 21%; }
-.interactive-document.cv .document-hotspots button:nth-child(2) { left: 3%; top: 45%; width: 33.5%; height: 22.5%; }
-.interactive-document.cv .document-hotspots button:nth-child(3) { left: 3%; top: 69.5%; width: 33.5%; height: 26%; }
-.interactive-document.cv .document-hotspots button:nth-child(4) { left: 44.8%; top: 28.5%; width: 49%; height: 34%; }
-.interactive-document.cv .document-hotspots button:nth-child(5) { left: 44.8%; top: 66%; width: 49%; height: 29%; }
+.interactive-document.cv .document-hotspots button { border-width: 2px; }
+/* Each card in the CV artwork is drawn with the same ~15px corner radius, but that's a very
+   different fraction of each hotspot's own width/height (they're all different sizes) — a single
+   border-radius here left a sliver of white gap between the drawn corner and the outline's corner
+   on some cards. border-radius resolves horizontal against width and vertical against height, so
+   each box gets its own X/Y pair sized to reproduce that same ~15px, circular, regardless of size. */
+.interactive-document.cv .document-hotspots button:nth-child(1) { left: 3%; top: 22%; width: 33.5%; height: 21%; border-radius: 4.48% / 3.8%; }
+.interactive-document.cv .document-hotspots button:nth-child(2) { left: 3%; top: 45%; width: 33.5%; height: 22.5%; border-radius: 4.48% / 3.54%; }
+.interactive-document.cv .document-hotspots button:nth-child(3) { left: 3%; top: 69.5%; width: 33.5%; height: 26%; border-radius: 4.48% / 3.07%; }
+.interactive-document.cv .document-hotspots button:nth-child(4) { left: 44.8%; top: 28.5%; width: 49%; height: 34%; border-radius: 3.06% / 2.35%; }
+.interactive-document.cv .document-hotspots button:nth-child(5) { left: 44.8%; top: 66%; width: 49%; height: 29%; border-radius: 3.06% / 2.75%; }
 .document-hotspots button.done { border-color: var(--ref-cyan); background: rgba(69,210,223,.1); }
 .interactive-document.cv .document-hotspots button.done { border-color: #1da94d; background: rgba(29,169,77,.10); }
 .interactive-document.cv .document-hotspots button.done::after { content: '✓'; width: 19px; height: 19px; position: absolute; top: 8px; right: 6px; display: grid; place-items: center; color: #169443; font-size: 1.28rem; font-weight: 1000; line-height: 1; text-shadow: 0 1px 0 #fff; }
