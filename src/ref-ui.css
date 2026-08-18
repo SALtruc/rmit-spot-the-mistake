@@ -449,19 +449,17 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .document-card.selected { background: transparent; }
 .setup-next { left: auto; right: max(20px, calc(50% - 240px)); }
 
-/* --intro-scale shrinks the rules card, badge stack and character together as the viewport gets
-   shorter (Safari's address/tab bars showing, or a shorter phone like iPhone 15 vs 16), so the
-   badges never creep up over the card's rule text no matter how little vertical room is available.
-   329px/409px are derived from the card and badge geometry at full size (94% card, 43% badges):
-   below ~738px tall nothing but a scale-down keeps the badge stack clear of both the text above it
-   and the Review button below it. */
-.ref-intro { height: 100dvh; min-height: 0; padding: 0; --intro-scale: clamp(0.45, calc((100dvh - 329px) / 409px), 1); }
+/* --intro-scale and --intro-stats-top are set from JS (Intro.jsx) using the *actual* rendered
+   width/height of this screen — the card, badge stack and character are flat art with no live
+   text, so a CSS-only formula tuned against one screen width silently breaks on every other phone.
+   The custom properties default here only cover the instant before that measurement effect runs. */
+.ref-intro { height: 100dvh; min-height: 0; padding: 0; --intro-scale: 1; --intro-stats-top: 515px; }
 .intro-logo { display: none; }
 .intro-help { top: 122px; }
 .intro-stage { height: min(520px, 55dvh); margin-top: 64px; }
 .intro-ref-card { width: calc(94% * var(--intro-scale)); max-height: none; right: auto; left: 50%; top: 0; z-index: 2; transform: translateX(-50%); }
 .intro-ref-character { width: calc(50% * var(--intro-scale)); max-height: none; left: -1%; bottom: calc(-186px * var(--intro-scale) - 16px); z-index: 3; }
-.intro-stats { width: calc(43% * var(--intro-scale)); margin: 0; position: absolute; top: calc(196px + 319px * var(--intro-scale)); right: 46px; z-index: 4; display: grid; grid-template-columns: 1fr; gap: calc(11px * var(--intro-scale)); }
+.intro-stats { width: calc(43% * var(--intro-scale)); margin: 0; position: absolute; top: var(--intro-stats-top); right: 46px; z-index: 4; display: grid; grid-template-columns: 1fr; gap: calc(11px * var(--intro-scale)); }
 .intro-stats > img { width: 100%; }
 .intro-review { width: min(56%, 255px); margin: 0; position: absolute; right: 19px; bottom: 61px; z-index: 5; }
 

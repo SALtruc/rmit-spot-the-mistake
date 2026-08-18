@@ -61,6 +61,13 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
     onRetry()
   }
 
+  const reveal = () => {
+    setPending(null)
+    setSelectedLines([])
+    setSelectionTouched(false)
+    onReveal()
+  }
+
   const canSubmit = isMultiSelect ? selectionTouched : pending !== null
   const confirmedMistakes = tapped.filter((lineIndex) => section.lines[lineIndex]?.[1]).length
   const remainingMistakes = section.lines.filter(([, isMistake]) => isMistake === true).length - confirmedMistakes
@@ -109,11 +116,11 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
       </button>
       {isMultiSelect && <p className="selection-count" aria-live="polite">{selectionTouched ? `${selectedLines.length} answer${selectedLines.length === 1 ? '' : 's'} selected` : 'Choose every answer that applies.'}</p>}
       {!feedback && !done && <button className="section-submit" type="button" disabled={!canSubmit} onClick={submit}>{isMultiSelect ? 'Submit selected answers' : 'Submit'} <span>›</span></button>}
-      {!feedback && !done && <button className="show-answer" type="button" onClick={onReveal}>Show answer <small>(no points for this section)</small></button>}
       {feedback && <div className={`feedback ${feedback.kind}`} role="status"><strong>{feedback.title}</strong><p>{feedback.text}</p></div>}
       {feedback && !done && <div className="feedback-actions">
         <button type="button" onClick={retry}>{isMultiSelect ? `Keep looking${remainingMistakes ? ` (${remainingMistakes} left)` : ''}` : 'Try another answer'}</button>
       </div>}
+      {!done && <button className="show-answer" type="button" onClick={reveal}>Show answer <small>(no points for this section)</small></button>}
       {revealed && done && <p className="revealed-note">Answer revealed — no points earned for this section.</p>}
       {done && <button className="done-button" type="button" onClick={onDone}><img src={asset('Done button.png')} alt="Done — return to document overview" /></button>}
     </article>
