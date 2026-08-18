@@ -55,14 +55,16 @@ export function Intro({ doc, avatar, mistakes, onBack, onReview }) {
     if (!screenEl || !stageEl || !reviewEl) return
 
     const layout = () => {
+      screenEl.style.height = '' // measure against the natural 100dvh, not a previous pass's fix-up
       const width = screenEl.clientWidth
       if (!width) return
       const screenTop = screenEl.getBoundingClientRect().top
       const cardTop = stageEl.getBoundingClientRect().top - screenTop
-      const reviewTop = reviewEl.getBoundingClientRect().top - screenTop
+      const reviewRect = reviewEl.getBoundingClientRect()
+      const reviewTop = reviewRect.top - screenTop
       // The review button's own height comes from its <img>'s intrinsic aspect ratio — before it
       // decodes, the button collapses to ~0 height and reviewTop reads far too low. Skip that pass.
-      if (reviewEl.getBoundingClientRect().height < 4) return
+      if (reviewRect.height < 4) return
 
       // Solve the largest scale (capped at 1) at which the rule text, the badge stack below it,
       // and the review button below that all fit without overlapping.
@@ -71,7 +73,16 @@ export function Intro({ doc, avatar, mistakes, onBack, onReview }) {
       const scale = Math.min(1, Math.max(MIN_SCALE, perScaleHeight > 0 ? budget / perScaleHeight : 1))
 
       const cardHeight = 0.94 * scale * width * CARD_ASPECT
+      const statsHeight = 0.43 * scale * width * STATS_ASPECT_SUM + STATS_GAP * scale
       const statsTop = cardTop + cardHeight * CARD_TEXT_FRACTION + GAP_ABOVE_STATS
+      const statsBottom = statsTop + statsHeight
+
+      // Last resort: an unusually short and/or wide viewport (e.g. landscape) where even the
+      // minimum readable scale still doesn't leave enough room. Grow the screen instead of letting
+      // anything overlap — the review button is bottom-anchored, so it moves down by the same
+      // amount, and the page scrolls the rest of the way instead of cramming or clipping.
+      const deficit = statsBottom + GAP_BELOW_STATS - reviewTop
+      if (deficit > 0) screenEl.style.height = `calc(100dvh + ${Math.ceil(deficit)}px)`
 
       screenEl.style.setProperty('--intro-scale', String(scale))
       screenEl.style.setProperty('--intro-stats-top', `${statsTop}px`)
