@@ -72,7 +72,7 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
   const confirmedMistakes = tapped.filter((lineIndex) => section.lines[lineIndex]?.[1]).length
   const remainingMistakes = section.lines.filter(([, isMistake]) => isMistake === true).length - confirmedMistakes
   const instruction = isMultiSelect
-    ? `Select every line that contains a mistake. Correct answers stay checked after you submit.${confirmedMistakes ? ` ${remainingMistakes} mistake${remainingMistakes === 1 ? '' : 's'} left to find.` : ' You can choose more than one answer before submitting.'}`
+    ? `Select every line that contains a mistake. Correct answers stay checked after you submit.${confirmedMistakes ? ` ${remainingMistakes} mistake${remainingMistakes === 1 ? '' : 's'} left to find.` : ' You can select more than one answer, but if any selected line is fine, the whole submission counts as wrong.'}`
     : 'Tap the line containing a mistake. If nothing is wrong, tap None — this section looks fine.'
 
   return <section className="screen gameplay-screen ref-gameplay">
