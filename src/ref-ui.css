@@ -267,14 +267,14 @@
 .ref-review-card .none-button.pending { background: rgba(150,150,150,.35); }
 .section-submit { min-width: 108px; min-height: 43px; margin: 28px 0 0 auto; padding: 8px 15px; display: block; border: 2px solid #050505; border-radius: 999px; background: var(--ref-yellow); color: #050505; box-shadow: 4px 5px 0 #050505; font-weight: 800; }
 .section-submit:disabled { opacity: .45; }
-.show-answer { min-height: 30px; margin: 10px 0 0 auto; padding: 4px 4px; display: block; border: 0; background: transparent; color: inherit; opacity: .68; font-size: .68rem; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.show-answer { min-height: 30px; margin: 10px auto 0; padding: 4px 4px; display: block; border: 0; background: transparent; color: inherit; opacity: .68; font-size: .68rem; font-weight: 700; text-align: center; text-decoration: underline; text-underline-offset: 2px; }
 .show-answer small { display: block; font-size: .62rem; font-weight: 600; text-decoration: none; opacity: .85; }
 .revealed-note { margin: 16px 0 0; font-size: .72rem; font-weight: 800; font-style: italic; opacity: .8; }
 .ref-review-card .feedback { margin-top: 26px; padding: 13px; border: 1.5px solid #555; border-radius: 6px; color: #111; font-size: .78rem; }
 .ref-review-card .feedback.correct { background: #e6ffd5; }
 .ref-review-card .feedback.wrong { background: #ffd9dc; }
 .ref-review-card .feedback.progress { background: #fff1a8; }
-.feedback-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.feedback-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
 .feedback-actions button { min-height: 35px; padding: 6px 14px; border: 1.5px solid #050505; border-radius: 999px; background: var(--ref-red); color: #fff; font-size: .72rem; font-weight: 800; }
 .feedback-actions button:last-child { background: var(--ref-yellow); color: #050505; }
 .ref-review-card .done-button { margin: 22px 0 0 auto; }
@@ -310,7 +310,11 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .ref-home { min-height: max(820px, 100dvh); }
 .ref-home-logo { width: clamp(330px, 88vw, 465px); left: 50%; top: clamp(112px, 14dvh, 142px); transform: translateX(-50%); }
 .ref-home-bubble { width: clamp(265px, 74vw, 390px); top: clamp(302px, 38dvh, 348px); right: 3%; }
-.ref-home-character { width: min(75%, 390px); max-height: none; left: -7%; bottom: -1%; }
+/* Character width used to scale as a flat 75vw with no ceiling below the desktop cap, so on wider
+   phones (390–430px, i.e. most current iPhones) it grew tall enough to climb into the bubble
+   above it. Slowing the scaling rate keeps it clear of the bubble at every common phone width
+   while barely changing its size at the narrow end, where the floor keeps it from shrinking. */
+.ref-home-character { width: clamp(225px, 58vw, 390px); max-height: none; left: -7%; bottom: -2%; }
 .ref-home-start { width: clamp(165px, 47vw, 230px); right: 5%; bottom: clamp(78px, 10dvh, 116px); transition: transform .18s ease, filter .18s ease; }
 .ref-home-start:hover { transform: translateY(-3px) scale(1.03); filter: saturate(1.08); }
 .ref-home-start:focus-visible { border-radius: 999px; outline-color: var(--ref-yellow); }
@@ -462,7 +466,10 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .intro-help { top: 122px; }
 .intro-stage { height: min(520px, 55dvh); margin-top: 64px; }
 .intro-ref-card { width: calc(94% * var(--intro-scale)); max-height: none; right: auto; left: 50%; top: 0; z-index: 2; transform: translateX(-50%); }
-.intro-ref-character { width: calc(50% * var(--intro-scale)); max-height: none; left: -1%; bottom: calc(-186px * var(--intro-scale) - 16px); z-index: 3; }
+/* At scale 1 (roomy viewports, no need to shrink) the character sat just tall enough to reach up
+   into the card's last line of rule text — worst on LinkedIn's longer copy, but present on every
+   document. Crop more of it below the fold so its raised hand clears the text at every scale. */
+.intro-ref-character { width: calc(50% * var(--intro-scale)); max-height: none; left: -1%; bottom: calc(-235px * var(--intro-scale) - 20px); z-index: 3; }
 .intro-stats { width: calc(43% * var(--intro-scale)); margin: 0; position: absolute; top: var(--intro-stats-top); right: 46px; z-index: 4; display: grid; grid-template-columns: 1fr; gap: calc(11px * var(--intro-scale)); }
 .intro-stats > img { width: 100%; }
 .intro-review { width: min(56%, 255px); margin: 0; position: absolute; right: 19px; bottom: 61px; z-index: 5; }
@@ -489,14 +496,17 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .interactive-document.cv .document-hotspots button:nth-child(1) { left: 3%; top: 22%; width: 33.5%; height: 21%; border-radius: 4.48% / 3.8%; }
 .interactive-document.cv .document-hotspots button:nth-child(2) { left: 3%; top: 45%; width: 33.5%; height: 22.5%; border-radius: 4.48% / 3.54%; }
 .interactive-document.cv .document-hotspots button:nth-child(3) { left: 3%; top: 69.5%; width: 33.5%; height: 26%; border-radius: 4.48% / 3.07%; }
-.interactive-document.cv .document-hotspots button:nth-child(4) { left: 44.8%; top: 27.5%; width: 49%; height: 35.9%; border-radius: 3.06% / 2.22%; }
-.interactive-document.cv .document-hotspots button:nth-child(5) { left: 44.8%; top: 64.8%; width: 49%; height: 30.7%; border-radius: 3.06% / 2.6%; }
+.interactive-document.cv .document-hotspots button:nth-child(4) { left: 42.75%; top: 21.95%; width: 53.45%; height: 42.17%; border-radius: 2.81% / 1.89%; }
+.interactive-document.cv .document-hotspots button:nth-child(5) { left: 42.75%; top: 64.12%; width: 53.45%; height: 32.61%; border-radius: 2.81% / 2.45%; }
 .document-hotspots button.done { border-color: var(--ref-cyan); background: rgba(69,210,223,.1); }
 .interactive-document.cv .document-hotspots button.done { border-color: #1da94d; background: rgba(29,169,77,.10); }
 .interactive-document.cv .document-hotspots button.done::after { content: '✓'; width: 19px; height: 19px; position: absolute; top: 8px; right: 6px; display: grid; place-items: center; color: #169443; font-size: 1.28rem; font-weight: 1000; line-height: 1; text-shadow: 0 1px 0 #fff; }
 .interactive-document.cv .document-hotspots button:not(.done):not(.active)::after { content: 'TAP'; min-width: 28px; height: 17px; position: absolute; top: 6px; right: 5px; display: grid; place-items: center; border: 1.5px solid #050505; border-radius: 999px; background: var(--ref-yellow); box-shadow: 2px 2px 0 rgba(5,5,5,.82); color: var(--ref-navy); font-size: .52rem; font-weight: 1000; letter-spacing: .04em; line-height: 1; animation: tap-cue 1.5s ease-in-out infinite; }
-.interactive-document.cv .document-hotspots button:nth-child(4).done::after { top: -34px; }
-.interactive-document.cv .document-hotspots button:nth-child(4):not(.done):not(.active)::after { top: -34px; }
+/* Section 5's own heading ("Project & Professional Roles") runs the full width of its card, right
+   under the split — the default corner badge sits on top of its last few letters. Drop the badge
+   to the blank line below the heading instead, same trick as LinkedIn's section 1 further down. */
+.interactive-document.cv .document-hotspots button:nth-child(5).done::after { top: 24px; }
+.interactive-document.cv .document-hotspots button:nth-child(5):not(.done):not(.active)::after { top: 24px; }
 .document-hotspots button.active { border-color: var(--ref-red); background: rgba(239,27,45,.08); }
 .document-hotspots button span { display: none; }
 .document-hotspots button:not(.done):not(.active):hover { border-color: transparent; background: transparent; }
@@ -531,7 +541,7 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 
 /* Result screen follows the supplied mobile composition: score first, then prompt and right-aligned choices. */
 .ref-result { min-height: 100dvh; padding-bottom: 0; }
-.result-board-wrap { width: 94%; }
+.result-board-wrap { width: 94%; margin-top: 18px; }
 .result-board-wrap > strong { right: 19%; top: 55%; font-size: clamp(3.3rem, 14.5vw, 5.2rem); }
 .result-board-wrap > span { min-width: 52%; right: 11%; bottom: 16%; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--ref-navy); font-size: clamp(.84rem, 3.35vw, 1.04rem); font-style: italic; font-weight: 800; text-align: center; }
 .reflection-toggle { margin-top: -12px; }

@@ -56,8 +56,15 @@ export function useGame() {
       return awardCorrect('Sharp eye! This section is clean and professionally written.', true)
     }
 
+    // Mixing a fine line in with real mistakes now invalidates the whole submission — nothing is
+    // saved, so padding a correct guess with extra selections can't still score as correct.
+    if (incorrectSelections.length > 0) {
+      awardWrong('One or more selected lines are fine. Nothing was saved — select only the mistakes.')
+      return
+    }
+
     if (newlyConfirmed.length === 0) {
-      awardWrong('Those selected lines are fine. The green checks stay saved, so try a different line.')
+      awardWrong('Those lines are already saved. Try a different line.')
       return
     }
 
@@ -66,16 +73,14 @@ export function useGame() {
     const remaining = mistakes.length - savedAnswers.length
     setTapped((previous) => ({ ...previous, [activeKey]: savedAnswers }))
     setScore((value) => value + points)
-    setCombo((value) => incorrectSelections.length ? 1 : value + newlyConfirmed.length)
+    setCombo((value) => value + newlyConfirmed.length)
 
     if (remaining === 0) {
       setStatus((previous) => ({ ...previous, [active]: 'done' }))
       setFeedback({
         kind: 'correct',
         title: `All mistakes found! +${points} points`,
-        text: incorrectSelections.length
-          ? 'Every real mistake is now saved in green. One extra selected line was fine, so your combo reset.'
-          : 'Every mistake in this section is now saved in green.',
+        text: 'Every mistake in this section is now saved in green.',
       })
       return
     }
