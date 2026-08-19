@@ -1,5 +1,48 @@
 import { useEffect, useRef, useState } from 'react'
 import { RefHeader } from './RefChrome'
+import { downloadAsPdf, downloadAsPng } from '../utils/exportImage'
+
+// Used to be a plain <a download> straight at the .webp source — one click, one fixed format,
+// no say in the matter. This lets the user pick PNG or PDF before anything downloads.
+function SaveMenu({ doc }) {
+  const [open, setOpen] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event) => { if (!menuRef.current?.contains(event.target)) setOpen(false) }
+    const onKeyDown = (event) => event.key === 'Escape' && setOpen(false)
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  const save = async (format) => {
+    setOpen(false)
+    setBusy(true)
+    try {
+      const filename = `spot-the-mistake-${doc.id}-corrected.${format}`
+      if (format === 'png') await downloadAsPng(doc.corrected, filename)
+      else await downloadAsPdf(doc.corrected, filename)
+    } catch (error) {
+      console.warn('Could not export corrected document:', error)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return <div className="save-menu" ref={menuRef}>
+    <button type="button" className="save-menu-toggle" aria-haspopup="true" aria-expanded={open} disabled={busy} onClick={() => setOpen((value) => !value)}>{busy ? 'Saving…' : 'Save to device'} <span aria-hidden="true">↓</span></button>
+    {open && <div className="save-menu-options" role="menu">
+      <button type="button" role="menuitem" onClick={() => save('png')}>Save as PNG</button>
+      <button type="button" role="menuitem" onClick={() => save('pdf')}>Save as PDF</button>
+    </div>}
+  </div>
+}
 
 function CorrectedViewer({ doc, onClose }) {
   const backButton = useRef(null)
@@ -11,7 +54,7 @@ function CorrectedViewer({ doc, onClose }) {
   }, [onClose])
 
   return <section className="corrected-viewer" role="dialog" aria-modal="true" aria-label={`Corrected ${doc.label}`}>
-    <div className="corrected-viewer-actions"><button ref={backButton} type="button" onClick={onClose}>← Back</button><a href={doc.corrected} download={`spot-the-mistake-${doc.id}-corrected.webp`}>Save to device <span aria-hidden="true">↓</span></a></div>
+    <div className="corrected-viewer-actions"><button ref={backButton} type="button" onClick={onClose}>← Back</button><SaveMenu doc={doc} /></div>
     <img src={doc.corrected} alt={`Corrected ${doc.label}`} decoding="async" />
   </section>
 }
