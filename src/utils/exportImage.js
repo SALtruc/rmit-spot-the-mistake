@@ -34,6 +34,46 @@ function triggerDownload(blob, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
+// A plain <a download> just drops the file in the browser's fixed Downloads folder — no prompt,
+// and on a phone it never reaches the Photos/Files app the user actually wants. This asks the OS
+// itself where to put the file, in whichever way the current platform offers that:
+//  1. Phones (iOS/Android): the native share sheet, which lists "Save to Photos"/"Save Image"
+//     (images) or "Save to Files" (PDF) alongside AirDrop, Messages, etc.
+//  2. Desktop Chromium: the File System Access API's native "Save As" dialog, so the user picks
+//     the destination folder themselves.
+//  3. Everything else (desktop Safari/Firefox, older browsers): falls back to the browser's own
+//     download prompt/behavior — the best that's available there.
+async function saveFile(blob, filename, mimeType) {
+  const file = new File([blob], filename, { type: mimeType })
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file] })
+      return
+    } catch (error) {
+      if (error?.name === 'AbortError') return // user dismissed the share sheet — not a failure
+      // real failure (e.g. share target rejected the file) — fall through to the next strategy
+    }
+  }
+
+  if (window.showSaveFilePicker) {
+    try {
+      const extension = filename.slice(filename.lastIndexOf('.'))
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{ description: mimeType, accept: { [mimeType]: [extension] } }],
+      })
+      const writable = await handle.createWritable()
+      await writable.write(blob)
+      await writable.close()
+      return
+    } catch (error) {
+      if (error?.name === 'AbortError') return // user cancelled the Save As dialog
+    }
+  }
+
+  triggerDownload(blob, filename)
+}
+
 // Wraps a JPEG directly in a single-page PDF (DCTDecode needs no re-encoding) without pulling in
 // a PDF library for one embedded image. Page size mirrors the image's pixel size 1:1 (72dpi
 // assumption) — unconventional as a page size, but the whole document is just the one picture.
@@ -85,7 +125,7 @@ function buildSingleImagePdf(jpegBytes, width, height) {
 
 export async function downloadAsPng(src, filename) {
   const canvas = await toCanvas(src)
-  triggerDownload(await canvasToBlob(canvas, 'image/png'), filename)
+  await saveFile(await canvasToBlob(canvas, 'image/png'), filename, 'image/png')
 }
 
 export async function downloadAsPdf(src, filename) {
@@ -93,5 +133,5 @@ export async function downloadAsPdf(src, filename) {
   const jpegBlob = await canvasToBlob(canvas, 'image/jpeg', 0.92)
   const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer())
   const pdfBytes = buildSingleImagePdf(jpegBytes, canvas.width, canvas.height)
-  triggerDownload(new Blob([pdfBytes], { type: 'application/pdf' }), filename)
+  await saveFile(new Blob([pdfBytes], { type: 'application/pdf' }), filename, 'application/pdf')
 }
