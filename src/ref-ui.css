@@ -505,12 +505,12 @@ button:focus-visible, input:focus-visible { outline: 4px solid #080768; outline-
 .interactive-document.cv .document-hotspots button:nth-child(5) { left: 42.75%; top: 64.12%; width: 53.45%; height: 32.61%; border-radius: 2.81% / 2.45%; }
 .document-hotspots button.done { border-color: var(--ref-cyan); background: rgba(69,210,223,.1); }
 .interactive-document.cv .document-hotspots button.done { border-color: #1da94d; background: rgba(29,169,77,.10); }
-.interactive-document.cv .document-hotspots button.done::after { content: '✓'; width: 19px; height: 19px; position: absolute; top: 8px; right: 4px; display: grid; place-items: center; color: #169443; font-size: 1.28rem; font-weight: 1000; line-height: 1; text-shadow: 0 1px 0 #fff; }
+.interactive-document.cv .document-hotspots button.done::after { content: '✓'; width: 19px; height: 19px; position: absolute; top: 4px; right: 3px; display: grid; place-items: center; color: #169443; font-size: 1.28rem; font-weight: 1000; line-height: 1; text-shadow: 0 1px 0 #fff; }
 .interactive-document.cv .document-hotspots button:not(.done):not(.active)::after { content: 'TAP'; min-width: 28px; height: 17px; position: absolute; top: 6px; right: 5px; display: grid; place-items: center; border: 1.5px solid #050505; border-radius: 999px; background: var(--ref-yellow); box-shadow: 2px 2px 0 rgba(5,5,5,.82); color: var(--ref-navy); font-size: .52rem; font-weight: 1000; letter-spacing: .04em; line-height: 1; animation: tap-cue 1.5s ease-in-out infinite; }
 /* Section 5's own heading ("Project & Professional Roles") runs the full width of its card, right
    under the split — the default corner badge sits on top of its last few letters. Drop the badge
    to the blank line below the heading instead, same trick as LinkedIn's section 1 further down. */
-.interactive-document.cv .document-hotspots button:nth-child(5).done::after { top: 24px; }
+.interactive-document.cv .document-hotspots button:nth-child(5).done::after { top: 20px; }
 .interactive-document.cv .document-hotspots button:nth-child(5):not(.done):not(.active)::after { top: 24px; }
 .document-hotspots button.active { border-color: var(--ref-red); background: rgba(239,27,45,.08); }
 .document-hotspots button span { display: none; }
