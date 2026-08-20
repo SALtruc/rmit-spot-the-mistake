@@ -8,6 +8,9 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
   const [pending, setPending] = useState(null)
   const [selectedLines, setSelectedLines] = useState([])
   const [selectionTouched, setSelectionTouched] = useState(false)
+  // "Show answer" stays hidden until the student has missed at least once — surfacing it up front
+  // just invites skipping straight to it instead of actually attempting the section.
+  const [hasMissed, setHasMissed] = useState(false)
   const isMultiSelect = doc.id === 'linkedin'
 
   useEffect(() => {
@@ -15,7 +18,12 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
     setPending(null)
     setSelectedLines([])
     setSelectionTouched(false)
+    setHasMissed(false)
   }, [index])
+
+  useEffect(() => {
+    if (feedback?.kind === 'wrong') setHasMissed(true)
+  }, [feedback])
 
   useEffect(() => {
     const dismissOnEscape = (event) => { if (event.key === 'Escape') setShowHint(false) }
@@ -120,7 +128,7 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
       {feedback && !done && <div className="feedback-actions">
         <button type="button" onClick={retry}>{isMultiSelect ? `Keep looking${remainingMistakes ? ` (${remainingMistakes} left)` : ''}` : 'Try another answer'}</button>
       </div>}
-      {!done && <button className="show-answer" type="button" onClick={reveal}>Show answer <small>(no points for this section)</small></button>}
+      {!done && hasMissed && <button className="show-answer" type="button" onClick={reveal}>Show answer <small>(no points for this section)</small></button>}
       {revealed && done && <p className="revealed-note">Answer revealed — no points earned for this section.</p>}
       {done && <button className="done-button" type="button" onClick={onDone}><img src={asset('Done button.png')} alt="Done — return to document overview" /></button>}
     </article>

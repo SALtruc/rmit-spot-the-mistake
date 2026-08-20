@@ -33,8 +33,8 @@ const CARD_ASPECT = 1.294 // card art height / width
 const CARD_TEXT_FRACTION = 0.667 // how far down the card the rule text ends, as a fraction of its height
 const STATS_ASPECT_SUM = 0.256 + 0.247 // the two badge images' combined height / their shared width
 const STATS_GAP = 11
-const GAP_ABOVE_STATS = 20
-const GAP_BELOW_STATS = 15
+const GAP_ABOVE_STATS = 32
+const GAP_BELOW_STATS = 24
 const MIN_SCALE = 0.45
 
 export function Intro({ doc, avatar, mistakes, onBack, onReview }) {
