@@ -175,6 +175,9 @@
   --home-pad: clamp(100px, 13dvh, 130px);
   /* Logo.png is 2937x1154 (h/w 0.393); cqw resolves against this screen, so this is its exact height. */
   --home-logo-bottom: calc(var(--home-pad) + min(86cqw, 430px) * 0.393);
+  --home-bubble-gap: clamp(10px, 2.5dvh, 28px);
+  /* Bubble Chat.png is 2203x633 (h/w 0.287). */
+  --home-bubble-bottom: calc(var(--home-logo-bottom) + var(--home-bubble-gap) + min(72cqw, 360px) * 0.287);
   container-type: inline-size;
   min-height: max(100dvh, 560px);
   padding-top: var(--home-pad);
@@ -195,15 +198,16 @@
 .ref-home-bubble {
   width: min(72%, 360px);
   display: block;
-  margin: clamp(10px, 2.5dvh, 28px) 5% 0 auto;
+  margin: var(--home-bubble-gap) 5% 0 auto;
   position: relative;
   z-index: 3;
 }
 
 .ref-home-character {
   width: min(68%, 340px);
-  /* Head always starts below the logo — 24px clears the gap plus the 8px idle float. */
-  max-height: calc(100% - var(--home-logo-bottom) - 24px);
+  /* Face (starts ~7% down the art) always sits below the speech bubble, so the bubble never covers it;
+     only the ponytail may tuck behind the bubble. 16px leaves room for the 8px idle float. */
+  max-height: calc((100% - var(--home-bubble-bottom) - 16px) / 0.93);
   position: absolute;
   left: -5%;
   bottom: 0;
