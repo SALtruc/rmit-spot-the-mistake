@@ -172,8 +172,12 @@
    height); the mascot and START are pinned to the bottom. min-height on the screen reserves room for
    both halves so a short/landscape viewport scrolls instead of stacking them on top of each other. */
 .ref-home {
+  --home-pad: clamp(100px, 13dvh, 130px);
+  /* Logo.png is 2937x1154 (h/w 0.393); cqw resolves against this screen, so this is its exact height. */
+  --home-logo-bottom: calc(var(--home-pad) + min(86cqw, 430px) * 0.393);
+  container-type: inline-size;
   min-height: max(100dvh, 560px);
-  padding-top: clamp(100px, 13dvh, 130px);
+  padding-top: var(--home-pad);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -198,7 +202,8 @@
 
 .ref-home-character {
   width: min(68%, 340px);
-  max-height: calc(100% - 230px);
+  /* Head always starts below the logo — 24px clears the gap plus the 8px idle float. */
+  max-height: calc(100% - var(--home-logo-bottom) - 24px);
   position: absolute;
   left: -5%;
   bottom: 0;
