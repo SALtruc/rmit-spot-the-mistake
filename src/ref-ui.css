@@ -356,12 +356,19 @@
   box-shadow: 3px 4px 0 #050505;
 }
 
-.verify-character {
-  width: 100%;
+/* GSAP animates the wrapper; the mirror flip stays on the inner <img>. GSAP reads a lone
+   scaleX(-1) back as rotate(180deg) + scaleY(-1), so tweening the flipped element directly turns
+   the mascot upside down. */
+.verify-character-wrap {
   display: block;
   position: relative;
   z-index: 2;
-  scale: -1 1; /* mirrored via `scale`, not `transform`, so GSAP's float animation can own transform */
+}
+
+.verify-character {
+  width: 100%;
+  display: block;
+  transform: scaleX(-1);
 }
 
 /* ----------------------------------------------------

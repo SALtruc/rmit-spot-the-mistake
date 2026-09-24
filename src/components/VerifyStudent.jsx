@@ -44,7 +44,7 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
           {valid && <button className="ref-next verify-next" type="submit">Enter <span>›</span></button>}
           <RatingStars />
         </div>
-        <img className="verify-character" src={asset('Start Screen/Character.png')} alt="Illustrated career coach" />
+        <span className="verify-character-wrap"><img className="verify-character" src={asset('Start Screen/Character.png')} alt="Illustrated career coach" /></span>
       </div>
     </form>
   </section>
