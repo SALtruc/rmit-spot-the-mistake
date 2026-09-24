@@ -35,19 +35,20 @@ export function Intro({ doc, avatar, mistakes, onBack, onReview }) {
 
   return <section className="ref-screen ref-blue ref-intro">
     <RefHeader avatar={avatar} back={onBack} />
-    <button ref={helpButton} className="intro-help" type="button" aria-label={`Show how to play ${doc.label}`} aria-expanded={showRule} onClick={() => setShowRule(true)}>
-      <img src={doc.introAssets.help} alt="" />
-    </button>
     <div className="intro-stage">
-      <img className="intro-ref-card" src={doc.introAssets.card} alt={doc.introTitle} />
+      <div className="intro-card-wrap">
+        <img className="intro-ref-card" src={doc.introAssets.card} alt={doc.introTitle} />
+        <div className="intro-card-extras">
+          <img className="intro-stat" src={doc.introAssets.mistakes} alt={`${mistakes} mistakes hidden`} />
+          <button ref={helpButton} className="intro-help" type="button" aria-label={`Show how to play ${doc.label}`} aria-expanded={showRule} onClick={() => setShowRule(true)}>
+            <img src={doc.introAssets.help} alt="" />
+          </button>
+        </div>
+      </div>
     </div>
     <div className="intro-bottom-row">
       <img className="intro-ref-character" src={doc.character} alt="Illustrated recruiter" />
       <div className="intro-actions-col">
-        <div className="intro-stats">
-          <img src={doc.introAssets.mistakes} alt={`${mistakes} mistakes hidden`} />
-          <img src={doc.introAssets.time} alt="Time limit: 1 minute" />
-        </div>
         <button className="image-button intro-review" type="button" onClick={onReview}>
           <img src={doc.introAssets.review} alt={`Review ${doc.label}`} />
         </button>

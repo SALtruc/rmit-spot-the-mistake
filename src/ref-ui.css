@@ -702,13 +702,10 @@
 }
 
 .intro-help {
-  width: 44px;
-  height: 44px;
+  flex: none;
+  width: clamp(40px, 12%, 52px);
+  aspect-ratio: 1;
   padding: 0;
-  position: absolute;
-  top: 48px; /* vertically centred on the header avatar, sitting just left of it */
-  right: 94px;
-  z-index: 10;
   border: 0;
   border-radius: 50%;
   background: transparent;
@@ -731,13 +728,36 @@
   align-items: center;
 }
 
-.intro-ref-card {
-  width: 95%;
-  max-height: 50vh;
-  object-fit: contain;
-  display: block;
+/* Wrapper hugs the card art (aspect ~0.77) so the overlay below lines up with its white area. */
+.intro-card-wrap {
+  position: relative;
+  width: min(95%, 38.5vh);
   margin: 0 auto;
   z-index: 1;
+}
+
+.intro-ref-card {
+  width: 100%;
+  display: block;
+}
+
+/* Sits in the empty white space at the bottom of the card, below the instructions. */
+.intro-card-extras {
+  position: absolute;
+  left: 7%;
+  right: 9%;
+  bottom: 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 2;
+}
+
+.intro-stat {
+  width: 72%;
+  min-width: 0;
+  display: block;
 }
 
 .intro-bottom-row {
@@ -765,18 +785,6 @@
   gap: 12px;
   align-items: center;
   padding-bottom: 8px;
-}
-
-.intro-stats {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.intro-stats > img {
-  width: 100%;
-  display: block;
 }
 
 .intro-review {
