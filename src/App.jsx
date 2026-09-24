@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { ChooseMode } from './components/ChooseMode'
 import { Gameplay } from './components/Gameplay'
 import { Home } from './components/Home'
@@ -9,10 +9,13 @@ import { ProfileInfo } from './components/ProfileInfo'
 import { Result } from './components/Result'
 import { VerifyStudent } from './components/VerifyStudent'
 import { useGame } from './game/useGame'
+import { useScreenMotion } from './lib/motion'
 import { logGameResult } from './lib/resultLogger'
 
 export function App() {
   const game = useGame()
+  const shellRef = useRef(null)
+  useScreenMotion(shellRef, `${game.screen}:${game.doc?.id}:${game.active}`)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -36,7 +39,7 @@ export function App() {
     }).catch((error) => console.warn('Could not log game result:', error))
   }, [game.screen, game.doc, game.profile.sid, game.score, game.completed, game.badge])
 
-  return <main className="app-shell">
+  return <main ref={shellRef} className="app-shell">
     {game.screen === 'home' && <Home onStart={() => game.setScreen('verify')} />}
     {game.screen === 'verify' && <VerifyStudent sid={game.profile.sid} onChange={(value) => game.setProfileField('sid', value)} onBack={() => game.setScreen('home')} onNext={() => game.setScreen('avatar')} />}
     {game.screen === 'avatar' && <ChooseAvatar selected={game.profile.avatar} onSelect={(value) => game.setProfileField('avatar', value)} onBack={() => game.setScreen('verify')} onNext={() => game.setScreen('profile')} />}

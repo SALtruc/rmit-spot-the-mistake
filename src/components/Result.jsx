@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { RefHeader } from './RefChrome'
 import { downloadAsPdf, downloadAsPng } from '../utils/exportImage'
+import { burst, countUp } from '../lib/motion'
 
 // Used to be a plain <a download> straight at the .webp source — one click, one fixed format,
 // no say in the matter. This lets the user pick PNG or PDF before anything downloads.
@@ -64,18 +65,31 @@ export function Result({ doc, avatar, score, badge, onAgain }) {
   const [showReflection, setShowReflection] = useState(false)
   const resultDocumentName = doc.id === 'cv' ? 'CV' : doc.label
 
+  const scoreRef = useRef(null)
+  const boardRef = useRef(null)
+
   useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    countUp(scoreRef.current, score)
+    const timer = setTimeout(() => burst(boardRef.current, 40), 900)
+    return () => clearTimeout(timer)
+  }, [score])
 
   return <section className="ref-screen ref-blue ref-result">
     <RefHeader avatar={avatar} back={onAgain} />
-    <div className="result-board-wrap"><img src={doc.resultAssets.board} alt="Spot the Mistake score board" /><strong>{score}</strong><span>{doc.sections.length} out of {doc.sections.length} sections cleared!</span></div>
+    <div ref={boardRef} className="result-board-wrap"><img src={doc.resultAssets.board} alt="Spot the Mistake score board" /><strong ref={scoreRef}>{score}</strong><span>{doc.sections.length} out of {doc.sections.length} sections cleared!</span></div>
     {showCorrect
       ? <CorrectedViewer doc={doc} onClose={() => setShowCorrect(false)} />
       : <>
         <button className="reflection-toggle" type="button" onClick={() => setShowReflection((value) => !value)} aria-expanded={showReflection}><span>Tap here to see reflection questions</span><b>{showReflection ? '⌃' : '⌄'}</b></button>
         {showReflection && <img className="reflection-panel" src={doc.resultAssets.reflection} alt="Reflection questions" />}
-        <div className="result-question"><img src={doc.resultAssets.character} alt="Illustrated recruiter" /><p>Would you like to see the correct version of this {resultDocumentName}?</p></div>
-        <div className="result-actions"><button className="image-button" type="button" onClick={() => setShowCorrect(true)}><img src={doc.resultAssets.yes} alt="Of course, let's go" /></button><button className="image-button" type="button" onClick={onAgain}><img src={doc.resultAssets.no} alt="No, back to mode selection" /></button></div>
+        <div className="result-question">
+          <img src={doc.resultAssets.character} alt="Illustrated recruiter" />
+          <div className="result-question-body">
+            <p>Would you like to see the correct version of this {resultDocumentName}?</p>
+            <div className="result-actions"><button className="image-button" type="button" onClick={() => setShowCorrect(true)}><img src={doc.resultAssets.yes} alt="Of course, let's go" /></button><button className="image-button" type="button" onClick={onAgain}><img src={doc.resultAssets.no} alt="No, back to mode selection" /></button></div>
+          </div>
+        </div>
       </>}
   </section>
 }

@@ -101,7 +101,7 @@ export const documents = {
       ] },
       { title: 'Why this role?', question: 'Why do you want to apply for this role?', lines: [
         ['I want to apply for this role because I want to learn more about marketing and gain real work experience.', false, 'This shows genuine interest in learning.'],
-        ['I do not have much professional experience yet, but I am willing to learn anything. I hope your company can train me and give me a chance.', true, 'This undermines the candidate and frames them as a charity case. Focus on what you can offer.'],
+        ['I do not have much professional experience yet, but I am willing to learn anything. I hope your company can train me and give me a chance.', true, "This messaging may unintentionally diminish the candidate's strengths. Instead, focus on the value, opportunities, and support you can offer."],
         ['I think this experience can be useful for my future career in marketing.', false, 'Vague, but not the primary mistake.'],
       ] },
       { title: 'Relevant experience', question: 'Can you tell me about any relevant experience you have?', lines: [
@@ -114,7 +114,7 @@ export const documents = {
         ['I can work well under pressure and I am a fast learner.', false, 'Generic, but not the primary mistake.'],
       ] },
       { title: 'Closing', question: 'Is there anything else you would like to add before we close?', lines: [
-        ['I hope your company can train me and give me a chance. That is all about me. Thank you.', true, 'This positions the candidate as a burden. End with a confident statement of contribution instead.'],
+        ['I hope your company can train me and give me a chance. That is all about me. Thank you.', true, "Shift the focus from support needed to value delivered. Close with a strong statement about the candidate's potential contributions."],
         ['Thank you so much for your time and for this opportunity.', false, 'Polite and professional closing courtesy.'],
       ] },
     ],

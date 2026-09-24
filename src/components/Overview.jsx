@@ -5,7 +5,7 @@ import { ScoreBar } from './shared'
 export function Overview({ doc, avatar, status, score, combo, onBack, onOpen, onFinish }) {
   const allDone = doc.sections.every((_, index) => status[index] === 'done')
 
-  return <section className="screen overview-screen">
+  return <section className="ref-screen ref-blue overview-screen">
     <RefHeader avatar={avatar} back={onBack} />
     <img className="overview-logo" src={asset('Logo.png')} alt="Spot the Mistake" decoding="async" />
     {doc.sectionPreviews

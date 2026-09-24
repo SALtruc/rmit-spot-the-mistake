@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { playFeedback } from '../lib/motion'
 import { asset } from '../utils/assets'
 import { RefHeader } from './RefChrome'
 import { ScoreBar } from './shared'
@@ -12,6 +13,7 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
   // just invites skipping straight to it instead of actually attempting the section.
   const [hasMissed, setHasMissed] = useState(false)
   const isMultiSelect = doc.id === 'linkedin'
+  const cardRef = useRef(null)
 
   useEffect(() => {
     setShowHint(false)
@@ -23,6 +25,7 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
 
   useEffect(() => {
     if (feedback?.kind === 'wrong') setHasMissed(true)
+    if (feedback) playFeedback(cardRef.current, feedback.kind)
   }, [feedback])
 
   useEffect(() => {
@@ -83,10 +86,10 @@ export function Gameplay({ doc, avatar, section, index, status, tapped, done, re
     ? `Select every line that contains a mistake. Correct answers stay checked after you submit.${confirmedMistakes ? ` ${remainingMistakes} mistake${remainingMistakes === 1 ? '' : 's'} left to find.` : ' You can select more than one answer, but if any selected line is fine, the whole submission counts as wrong.'}`
     : 'Tap the line containing a mistake. If nothing is wrong, tap None — this section looks fine.'
 
-  return <section className="screen gameplay-screen ref-gameplay">
+  return <section className="ref-screen ref-blue gameplay-screen ref-gameplay">
     <RefHeader avatar={avatar} back={onDone} />
     <button className="game-help" type="button" aria-label={`Show how to play ${doc.label}`} aria-expanded={showHint} onClick={() => setShowHint(true)}>?</button>
-    <article className={`review-card ref-review-card ${doc.id}`}>
+    <article ref={cardRef} className={`review-card ref-review-card ${doc.id}`}>
       <h1>{section.title}</h1>
       <span className="section-rule" />
       {section.question && <div className="question-box"><span>Interviewer</span><p>“{section.question}”</p></div>}
