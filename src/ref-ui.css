@@ -5,6 +5,7 @@
   --ref-navy: #080768;
   --ref-cyan: #45d2df;
   --ref-line: rgba(255, 255, 255, 0.18);
+  --font-museo: "Museo", "Museo Sans", "Museo Sans Rounded", "Arial Rounded MT Bold", Arial, sans-serif;
 }
 
 .app-shell {
@@ -274,6 +275,7 @@
 
 .verify-card p {
   margin: 0 0 6px;
+  font-family: var(--font-museo);
   font-size: 1.15rem;
   font-weight: 700;
 }
@@ -281,7 +283,7 @@
 .verify-card h1 {
   margin: 0 0 24px;
   color: var(--ref-red);
-  font-family: Arial Rounded MT Bold, Arial, sans-serif;
+  font-family: var(--font-museo);
   font-size: clamp(2.4rem, 8.5vw, 3.4rem);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -303,9 +305,16 @@
   border-radius: 0;
   background: transparent;
   text-align: center;
+  font-family: var(--font-museo);
   font-size: 1.25rem;
   font-weight: 700;
   outline: 0;
+}
+
+.verify-card input::placeholder {
+  color: #c6c6c6;
+  font-family: var(--font-museo);
+  opacity: 1;
 }
 
 .verify-card input:focus {
@@ -342,6 +351,7 @@
   border-radius: 22px;
   background: #ffcc25;
   box-shadow: 4px 5px 0 #080808;
+  font-family: var(--font-museo);
   font-size: 0.92rem;
   font-weight: 700;
   line-height: 1.3;

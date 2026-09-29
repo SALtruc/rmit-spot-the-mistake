@@ -39,7 +39,7 @@ export function VerifyStudent({ sid, onChange, onBack, onNext }) {
       <div className="verify-bottom">
         <div className="verify-actions">
           <p id="sid-tip" className="sid-tip" aria-live="polite">
-            {valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify!'}
+            {valid ? 'SID verified — you can enter now.' : 'Please enter your SID to verify'}
           </p>
           {valid && <button className="ref-next verify-next" type="submit">Enter <span>›</span></button>}
           <RatingStars />
