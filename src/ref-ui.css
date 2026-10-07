@@ -5,6 +5,7 @@
   --ref-navy: #080768;
   --ref-cyan: #45d2df;
   --ref-line: rgba(255, 255, 255, 0.18);
+  --font-museo: "Museo", "Museo Sans", "Museo Sans Rounded", "Arial Rounded MT Bold", Arial, sans-serif;
 }
 
 .app-shell {
@@ -175,6 +176,9 @@
   --home-pad: clamp(100px, 13dvh, 130px);
   /* Logo.png is 2937x1154 (h/w 0.393); cqw resolves against this screen, so this is its exact height. */
   --home-logo-bottom: calc(var(--home-pad) + min(86cqw, 430px) * 0.393);
+  --home-bubble-gap: clamp(10px, 2.5dvh, 28px);
+  /* Bubble Chat.png is 2203x633 (h/w 0.287). */
+  --home-bubble-bottom: calc(var(--home-logo-bottom) + var(--home-bubble-gap) + min(72cqw, 360px) * 0.287);
   container-type: inline-size;
   min-height: max(100dvh, 560px);
   padding-top: var(--home-pad);
@@ -195,15 +199,16 @@
 .ref-home-bubble {
   width: min(72%, 360px);
   display: block;
-  margin: clamp(10px, 2.5dvh, 28px) 5% 0 auto;
+  margin: var(--home-bubble-gap) 5% 0 auto;
   position: relative;
   z-index: 3;
 }
 
 .ref-home-character {
   width: min(68%, 340px);
-  /* Head always starts below the logo — 24px clears the gap plus the 8px idle float. */
-  max-height: calc(100% - var(--home-logo-bottom) - 24px);
+  /* Face (starts ~7% down the art) always sits below the speech bubble, so the bubble never covers it;
+     only the ponytail may tuck behind the bubble. 16px leaves room for the 8px idle float. */
+  max-height: calc((100% - var(--home-bubble-bottom) - 16px) / 0.93);
   position: absolute;
   left: -5%;
   bottom: 0;
@@ -270,6 +275,7 @@
 
 .verify-card p {
   margin: 0 0 6px;
+  font-family: var(--font-museo);
   font-size: 1.15rem;
   font-weight: 700;
 }
@@ -277,7 +283,7 @@
 .verify-card h1 {
   margin: 0 0 24px;
   color: var(--ref-red);
-  font-family: Arial Rounded MT Bold, Arial, sans-serif;
+  font-family: var(--font-museo);
   font-size: clamp(2.4rem, 8.5vw, 3.4rem);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -299,9 +305,16 @@
   border-radius: 0;
   background: transparent;
   text-align: center;
+  font-family: var(--font-museo);
   font-size: 1.25rem;
   font-weight: 700;
   outline: 0;
+}
+
+.verify-card input::placeholder {
+  color: #c6c6c6;
+  font-family: var(--font-museo);
+  opacity: 1;
 }
 
 .verify-card input:focus {
@@ -338,6 +351,7 @@
   border-radius: 22px;
   background: #ffcc25;
   box-shadow: 4px 5px 0 #080808;
+  font-family: var(--font-museo);
   font-size: 0.92rem;
   font-weight: 700;
   line-height: 1.3;
@@ -702,13 +716,10 @@
 }
 
 .intro-help {
-  width: 44px;
-  height: 44px;
+  flex: none;
+  width: clamp(40px, 12%, 52px);
+  aspect-ratio: 1;
   padding: 0;
-  position: absolute;
-  top: 48px; /* vertically centred on the header avatar, sitting just left of it */
-  right: 94px;
-  z-index: 10;
   border: 0;
   border-radius: 50%;
   background: transparent;
@@ -731,13 +742,36 @@
   align-items: center;
 }
 
-.intro-ref-card {
-  width: 95%;
-  max-height: 50vh;
-  object-fit: contain;
-  display: block;
+/* Wrapper hugs the card art (aspect ~0.77) so the overlay below lines up with its white area. */
+.intro-card-wrap {
+  position: relative;
+  width: min(95%, 38.5vh);
   margin: 0 auto;
   z-index: 1;
+}
+
+.intro-ref-card {
+  width: 100%;
+  display: block;
+}
+
+/* Sits in the empty white space at the bottom of the card, below the instructions. */
+.intro-card-extras {
+  position: absolute;
+  left: 7%;
+  right: 9%;
+  bottom: 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 2;
+}
+
+.intro-stat {
+  width: 72%;
+  min-width: 0;
+  display: block;
 }
 
 .intro-bottom-row {
@@ -765,18 +799,6 @@
   gap: 12px;
   align-items: center;
   padding-bottom: 8px;
-}
-
-.intro-stats {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.intro-stats > img {
-  width: 100%;
-  display: block;
 }
 
 .intro-review {

@@ -10,7 +10,7 @@ export const reduceMotion = () => typeof window !== 'undefined' && window.matchM
 
 const LOGOS = '.ref-home-logo, .ref-logo, .overview-logo, .verify-card > img, .result-board-wrap'
 const CARDS = '.verify-card, .intro-ref-card, .ref-review-card, .interactive-document, .ribbon-shadow'
-const STAGGER = '.avatar-choice-grid button, .document-card, .ref-field, .interview-section-list button, .intro-stats img, .intro-review, .answer-line, .none-button, .result-actions button, .reflection-toggle, .result-question p'
+const STAGGER = '.avatar-choice-grid button, .document-card, .ref-field, .interview-section-list button, .intro-card-extras > *, .intro-review, .answer-line, .none-button, .result-actions button, .reflection-toggle, .result-question p'
 const CHARACTERS = '.ref-home-character, .verify-character-wrap, .info-character, .intro-ref-character, .result-question > img'
 const FLOATERS = '.ref-home-bubble, .info-bubble, .ref-home-character, .verify-character-wrap, .info-character, .intro-ref-character, .result-question > img'
 const BUTTONS = '.ref-next, .ref-home-start, .setup-next, .section-submit, .overview-finish'

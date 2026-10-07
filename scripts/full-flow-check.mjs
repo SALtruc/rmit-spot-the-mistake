@@ -3,9 +3,9 @@ import path from 'node:path'
 
 const interviewMistakes = [[1], [1], [1], [0], [0]]
 
-const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true })
+const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true, args: ['--no-sandbox', '--disable-gpu'] })
 const page = await browser.newPage()
-await page.setViewport({ width: 440, height: 956, deviceScaleFactor: 1 })
+await page.setViewport({ width: Number(process.env.TEST_WIDTH || 440), height: 956, deviceScaleFactor: 1 })
 
 const settle = async () => {
   await page.waitForNetworkIdle({ idleTime: 150 })
@@ -59,3 +59,4 @@ await shot('result-corrected-viewer')
 
 await browser.close()
 console.log('Solo game flow passed.')
+

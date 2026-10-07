@@ -3,7 +3,7 @@ import { asset } from '../utils/assets'
 export const documents = {
   cv: {
     id: 'cv', label: 'CV / Resume', overview: asset('CV/CV-overview.webp'), corrected: asset('CV/correct CV.png'), character: asset('CV/introduce screen/Character.png'), choice: asset('Choose type/Frame 198.png'),
-    introAssets: { card: asset('CV/introduce screen/Frame 621.png'), help: asset('CV/introduce screen/Frame 42.png'), mistakes: asset('CV/introduce screen/Frame 619.png'), time: asset('CV/introduce screen/Frame 620.png'), review: asset('CV/introduce screen/Frame 614.png') },
+    introAssets: { card: asset('CV/introduce screen/Frame 621.png'), help: asset('CV/introduce screen/Frame 42.png'), mistakes: asset('CV/introduce screen/Frame 619.png'), review: asset('CV/introduce screen/Frame 614.png') },
     resultAssets: { board: asset('CV/result screen/Frame 200.png'), bubble: asset('CV/result screen/Bubble Chat.png'), yes: asset('CV/result screen/Frame 618.png'), no: asset('CV/result screen/Frame 105.png'), reflection: asset('CV/result screen/Frame 614.png'), character: asset('CV/result screen/Character.png') },
     instructionArt: asset('CV/Frame 470.png'),
     introTitle: 'New CV Received!', intro: 'A candidate has submitted their CV for review. Read every line like a recruiter would.', rule: 'Tap the line you think contains a mistake.',
@@ -38,7 +38,7 @@ export const documents = {
   },
   linkedin: {
     id: 'linkedin', label: 'LinkedIn Profile', overview: asset('LinkedIn/LinkedIn-overview.webp'), corrected: asset('LinkedIn/correct LinkedIn.png'), character: asset('LinkedIn/introduce screen/Character.png'), choice: asset('Choose type/Frame 197.png'),
-    introAssets: { card: asset('LinkedIn/introduce screen/Frame 617.png'), help: asset('LinkedIn/introduce screen/Frame 42.png'), mistakes: asset('LinkedIn/introduce screen/Frame 615.png'), time: asset('LinkedIn/introduce screen/Frame 616.png'), review: asset('LinkedIn/introduce screen/Frame 618.png') },
+    introAssets: { card: asset('LinkedIn/introduce screen/Frame 617.png'), help: asset('LinkedIn/introduce screen/Frame 42.png'), mistakes: asset('LinkedIn/introduce screen/Frame 615.png'), review: asset('LinkedIn/introduce screen/Frame 618.png') },
     resultAssets: { board: asset('LinkedIn/Result screen/Frame 200.png'), bubble: asset('LinkedIn/Result screen/Frame 618.png'), yes: asset('LinkedIn/Result screen/Frame 619.png'), no: asset('LinkedIn/Result screen/Frame 105.png'), reflection: asset('LinkedIn/Result screen/Frame 620.png'), character: asset('LinkedIn/Result screen/Character.png') },
     instructionArt: asset('LinkedIn/Frame 470.png'),
     introTitle: 'A LinkedIn Profile Needs Review!', intro: 'A student is applying for internships. Help them turn a casual profile into a credible first impression.', rule: 'Tap every line you think contains a mistake. You can choose more than one.',
@@ -81,7 +81,7 @@ export const documents = {
   },
   interview: {
     id: 'interview', label: 'Interview Transcript', overview: asset('Interview Transcript/Frame 618.png'), corrected: asset('Interview Transcript/correct interview transcript.png'), character: asset('Interview Transcript/introduce screen/Character.png'), choice: asset('Choose type/Frame 371.png'),
-    introAssets: { card: asset('Interview Transcript/introduce screen/Frame 620.png'), help: asset('Interview Transcript/introduce screen/Frame 42.png'), mistakes: asset('Interview Transcript/introduce screen/Frame 618.png'), time: asset('Interview Transcript/introduce screen/Frame 619.png'), review: asset('Interview Transcript/introduce screen/Frame 614.png') },
+    introAssets: { card: asset('Interview Transcript/introduce screen/Frame 620.png'), help: asset('Interview Transcript/introduce screen/Frame 42.png'), mistakes: asset('Interview Transcript/introduce screen/Frame 618.png'), review: asset('Interview Transcript/introduce screen/Frame 614.png') },
     resultAssets: { board: asset('Interview Transcript/result screen/Frame 200.png'), bubble: asset('Interview Transcript/result screen/Bubble Chat.png'), yes: asset('Interview Transcript/result screen/Frame 618.png'), no: asset('Interview Transcript/result screen/Frame 105.png'), reflection: asset('Interview Transcript/result screen/Frame 614.png'), character: asset('Interview Transcript/result screen/Character.png') },
     instructionArt: asset('Interview Transcript/Frame 470.png'),
     sectionPreviews: [
